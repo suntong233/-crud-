@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            margin: 50px auto 30px auto;
+            height: 80px;
+            width: 860px;
+            background-color: rgb(242, 242, 242);
+            display: flex;
+            align-items: center;
+        }
+
+        .headerName {
+            color: rgb(126, 126, 126);
+            margin: 0 20px 0 25px;
+            height: 100%;
+            line-height: 80px;
+        }
+
+        .searchIpt {
+            appearance: none;
+            outline: none;
+            padding-left: 10px;
+            border: 1px solid rgb(216, 218, 223);
+            border-radius: 4px;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        .searchBtn {
+            appearance: none;
+            outline: none;
+            margin-left: 15px;
+            padding: 0 15px;
+            height: 30px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgb(86, 145, 253);
+            color: rgb(254, 254, 255);
+            cursor: pointer;
+        }
+
+        .searchBtn:active {
+            background-color: rgb(145, 179, 243);
+        }
+
+        .main {
+            user-select: none;
+            margin: 0 auto;
+            width: 800px;
+        }
+
+        .mainContainer {
+            width: 100%;
+            height: 50px;
+            color: rgb(56, 55, 55);
+            font-size: 15px;
+            display: flex;
+        }
+
+        .maintitle {
+            font-size: 18px;
+            border-top: 1px solid rgb(191, 200, 228);
+            color: rgb(92, 90, 90);
+        }
+
+        .mainItem {
+            height: 100%;
+            display: flex;
+            float: left;
+            padding-left: 20px;
+            overflow: hidden;
+            align-items: center;
+            margin: -1px -1px 0 0;
+            border: 1px solid rgb(191, 200, 228);
+            border-top: 0;
+            overflow: hidden;
+        }
+
+        .grow1 {
+            width: 150px;
+        }
+
+        .grow2 {
+            width: 100px;
+        }
+
+        .grow3 {
+            width: 180px;
+            flex-grow: 1;
+        }
+
+        .grow4 {
+            width: 100px;
+        }
+
+        .grow5 {
+            width: 120px;
+            flex-grow: 0.4;
+        }
+
+        .mainItembtn {
+            border: none;
+            background-color: #fff;
+            border: 1px solid rgb(196, 203, 209);
+            border-radius: 3px;
+            margin-right: 5px;
+            padding: 3px 6px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .changeBtn:hover {
+            background-color: rgb(212, 236, 255);
+        }
+
+        .deleteBtn {
+            background: rgb(245, 108, 108);
+            padding: 4px 7px;
+            color: #fff;
+            border: none;
+        }
+
+        .deleteBtn:hover {
+            background-color: rgb(248, 73, 73);
+            color: rgb(246, 252, 253);
+        }
+
+        .changeMotai {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .inputBox {
+            position: fixed;
+            width: 240px;
+            height: 260px;
+            background-color: #fff;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -80%);
+            display: flex;
+            flex-direction: column;
+            padding: 5px 10px;
+            justify-content: space-evenly;
+        }
+
+        .inputLabel {
+            color: rgb(117, 117, 117);
+            width: 220px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            margin: 5px 0;
+        }
+
+        .handleChangeIpt {
+            flex: 1;
+            height: 80px;
+            padding-left: 15px;
+            margin-top: 5px;
+        }
+
+        .descript {
+            font-size: 14px;
+        }
+
+        .btnDiv {
+            width: 100%;
+            padding-right: 5px;
+            height: 40px;
+            line-height: 40px;
+            margin: 4px 10px;
+            text-align: right;
+        }
+
+        .actived2 {
+            display: block;
+        }
+
+        .add {
+            margin-left: 440px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="headerName">姓名</div>
+            <input v-model="tempName" class="searchIpt" type="text" placeholder="请输入姓名">
+            <button class="searchBtn" @click="handleSearch">搜索</button>
+            <button class="searchBtn add" @click="handleCreated">新增</button>
+        </div>
+        <div class="main">
+            <div class="mainContainer maintitle">
+                <div class="mainItem grow1">日期</div>
+                <div class="mainItem grow2">姓名</div>
+                <div class="mainItem grow3">地址</div>
+                <div class="mainItem grow4">邮编</div>
+                <div class="mainItem grow5">操作</div>
+            </div>
+            <div v-for="(item, index) in randerList" :key="index" class="mainContainer">
+                <div class="mainItem grow1">{{item.date}}</div>
+                <div class="mainItem grow2">{{item.name}}</div>
+                <div class="mainItem grow3">{{item.address}}</div>
+                <div class="mainItem grow4">{{item.mailNum}}</div>
+                <div class="mainItem grow5">
+                    <button @click="handleChange(item,index)" class="mainItembtn changeBtn">修改</button>
+                    <button @click="handleDelete(index)" class="mainItembtn deleteBtn">删除</button>
+                </div>
+            </div>
+        </div>
+        <div v-if="showMotai" :class="{actived2: isActived}" class="changeMotai">
+            <div @click="stopMao" class="inputBox">
+                <label class="inputLabel">
+                    <div class="descript">姓名</div><input v-model="tempList.name" class="handleChangeIpt" type="text">
+                </label>
+                <label class="inputLabel">
+                    <div class="descript">地址</div><input v-model="tempList.address" class="handleChangeIpt" type="text">
+                </label>
+                <label class="inputLabel">
+                    <div class="descript">邮编</div><input v-model="tempList.mailNum" class="handleChangeIpt" type="text">
+                </label>
+                <div class="btnDiv">
+                    <button @click="showMotaiFun" class="mainItembtn deleteBtn">取消</button>
+                    <button @click="saveChange" class="mainItembtn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let app = new Vue({
+        el: '#app',
+        data: {
+            showMotai: false,
+            tempName: '',
+            tebleList: [{
+                date: '2015-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路1518',
+                mailNum: '200333'
+            }, {
+                date: '2016-11-04',
+                name: '陈晨',
+                address: '苏州市平江区',
+                mailNum: '654867'
+            }, {
+                date: '2014-06-25',
+                name: '宁浩',
+                address: '常州市金坛区天宇人家',
+                mailNum: '100000'
+            }, {
+                date: '2017-05-01',
+                name: '张海',
+                address: '安庆市大观区',
+                mailNum: '100002'
+            }, {
+                date: '2016-11-05',
+                name: '陈王',
+                address: '合肥市包河区',
+                mailNum: '100004'
+            }, {
+                date: '2015-05-02',
+                name: '王浩',
+                address: '北京市昌平区',
+                mailNum: '456881'
+            }],
+            tempList: {
+                date: '',
+                name: '',
+                address: '',
+                mailNum: '',
+                index: ''
+            },
+            randerList: [],
+            isActived: false
+        },
+        created() {
+            this.randerDataChange()
+        },
+        mounted() {
+            this.isActived = true
+        },
+        methods: {
+            stopMao(e) {
+                e.stopPropagation()
+            },
+            handleDelete(index) {
+                this.tebleList.splice(index, 1)
+                this.randerDataChange()
+            },
+            handleSearch() {
+                let str = this.tempName.trim()
+                if (str === '') {
+                    this.randerDataChange()
+                    return
+                }
+                this.randerDataChange()
+                this.randerList = this.randerList.filter(item => {
+                    console.log([...item.name].includes(...str))
+                    return [...item.name].includes(...str)
+                })
+            },
+            randerDataChange() {
+                this.randerList = this.tebleList.map(item => {
+                    return item
+                })
+            },
+            handleChange(item, index) {
+                let now = new Date()
+                let year = now.getFullYear()
+                let month = this.quzheng(now.getMonth() + 1)
+                let date = this.quzheng(now.getDate())
+                this.tempList.date = year + '-' + month + '-' + date
+                this.tempList.name = item.name
+                this.tempList.address = item.address
+                this.tempList.mailNum = item.mailNum
+                this.tempList.index = index
+                this.showMotaiFun()
+            },
+            handleCreated() {
+                let now = new Date()
+                let year = now.getFullYear()
+                let month = this.quzheng(now.getMonth() + 1)
+                let date = this.quzheng(now.getDate())
+                this.tempList.date = year + '-' + month + '-' + date
+                this.tempList.name = ''
+                this.tempList.address = ''
+                this.tempList.mailNum = ''
+                this.tempList.index = this.tebleList.length
+                this.showMotaiFun()
+            },
+            showMotaiFun() {
+                this.showMotai = !this.showMotai
+            },
+            quzheng(num) {
+                return num < 10 ? '0' + num : num
+            },
+            saveChange() {
+                let tempobj = {}
+                if (this.tebleList.length === this.tempList.index) {
+                    tempobj.address = this.tempList.address
+                    tempobj.date = this.tempList.date
+                    tempobj.mailNum = this.tempList.mailNum
+                    tempobj.name = this.tempList.name
+                    this.tebleList = [...this.tebleList,tempobj]
+                    this.randerDataChange()
+                } else {
+                    tempobj = this.tebleList[this.tempList.index]
+                    tempobj.address = this.tempList.address
+                    tempobj.date = this.tempList.date
+                    tempobj.mailNum = this.tempList.mailNum
+                    tempobj.name = this.tempList.name
+                }
+                this.showMotaiFun()
+            }
+        }
+    })
+</script>
+
+</html>
